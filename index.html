@@ -11,28 +11,28 @@
 <style>
 /* Layout: a scrolling pitch deck — each section is one "slide" band; two live mockups (client phone, gym console) share one data model */
 :root{
-  --bg:#EDF0F5; --surface:#FFFFFF; --sunk:#F5F7FA; --ink:#101A35; --muted:#59647E; --line:#D6DCE7;
-  --accent:#E2492F; --accent-soft:#FBE3DD; --on-accent:#FFFFFF;
-  --go:#0D8A6E; --go-soft:#D8F1E9; --member:#9AA6BF; --phone:#101A35; --shadow:0 18px 40px -18px rgba(16,26,53,.35);
+  --bg:#F2F5EE; --surface:#FFFFFF; --sunk:#E9EFE4; --ink:#1D3B22; --muted:#5F6B60; --line:#DAE3D4;
+  --accent:#6B9550; --accent-soft:#E1ECD7; --on-accent:#FFFFFF; --swoosh:#D3DFCB;
+  --go:#4E7F3A; --go-soft:#E1ECD7; --member:#A9B8A2; --phone:#1D3B22; --shadow:0 18px 40px -20px rgba(29,59,34,.30);
   --f-display:"Karantina","Assistant",system-ui,sans-serif;
   --f-body:"Assistant",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
-  --bg:#0A1022; --surface:#131B34; --sunk:#0F1630; --ink:#E9EDF6; --muted:#9AA4BD; --line:#26314F;
-  --accent:#FF6B4F; --accent-soft:#3A1E1A; --on-accent:#14080A;
-  --go:#3CCB9F; --go-soft:#10362F; --member:#55617E; --phone:#04070E; --shadow:0 18px 40px -18px rgba(0,0,0,.7); color-scheme:dark}}
+  --bg:#0F1710; --surface:#172219; --sunk:#1D2A1F; --ink:#E5EEE0; --muted:#9DAA9A; --line:#2A3A2C;
+  --accent:#93C070; --accent-soft:#25361F; --on-accent:#0F1710; --swoosh:#1E2C1F;
+  --go:#93C070; --go-soft:#25361F; --member:#4F6150; --phone:#070B07; --shadow:0 18px 40px -18px rgba(0,0,0,.7); color-scheme:dark}}
 :root[data-theme="dark"]{
-  --bg:#0A1022; --surface:#131B34; --sunk:#0F1630; --ink:#E9EDF6; --muted:#9AA4BD; --line:#26314F;
-  --accent:#FF6B4F; --accent-soft:#3A1E1A; --on-accent:#14080A;
-  --go:#3CCB9F; --go-soft:#10362F; --member:#55617E; --phone:#04070E; --shadow:0 18px 40px -18px rgba(0,0,0,.7); color-scheme:dark}
+  --bg:#0F1710; --surface:#172219; --sunk:#1D2A1F; --ink:#E5EEE0; --muted:#9DAA9A; --line:#2A3A2C;
+  --accent:#93C070; --accent-soft:#25361F; --on-accent:#0F1710; --swoosh:#1E2C1F;
+  --go:#93C070; --go-soft:#25361F; --member:#4F6150; --phone:#070B07; --shadow:0 18px 40px -18px rgba(0,0,0,.7); color-scheme:dark}
 
 body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55}
 .deck{direction:rtl}
 .band{padding-block:72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
 .band.alt{background:var(--surface)}
 .wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
-.eyebrow{font-family:var(--f-data);font-size:12.5px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;direction:ltr;text-align:right}
+.eyebrow{font-family:var(--f-data);font-size:13px;letter-spacing:.14em;color:var(--ink);text-transform:uppercase;direction:ltr;text-align:right}
 h1,h2,h3{margin:0;text-wrap:balance}
 h1{font-family:var(--f-display);font-weight:700;font-size:clamp(64px,11vw,132px);line-height:.86;letter-spacing:-.01em}
 h2{font-family:var(--f-display);font-weight:700;font-size:clamp(44px,6.4vw,76px);line-height:.92}
@@ -56,16 +56,40 @@ p{margin:0;max-width:62ch}
 .hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}
 @media (max-width:860px){.hero{grid-template-columns:1fr}}
 .hero h1 .swipe{color:var(--accent)}
-.ticker{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
-.ticker-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700}
-.live{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--go);font-weight:700}
-.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--go);animation:pulse 1.6s infinite}
-@keyframes pulse{50%{opacity:.25}}
-.trow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px dashed var(--line)}
-.trow b{font-weight:700}
-.trow .t{font-family:var(--f-data);font-size:15px;direction:ltr}
-.spots{font-size:13px;font-weight:700;color:var(--go)}
-.spots.low{color:var(--accent)}
+#s1{position:relative;overflow:hidden}
+#s1 .wrap{position:relative;z-index:1}
+.swoosh{position:absolute;left:-60px;top:0;width:min(560px,70vw);height:100%;z-index:0;pointer-events:none}
+.swoosh .sw{fill:var(--swoosh)}
+.swoosh .db{fill:var(--ink)}
+.swoosh .db2{fill:var(--accent)}
+.swoosh .spark{stroke:var(--ink);stroke-width:5;stroke-linecap:round}
+.pills{display:flex;gap:10px;flex-wrap:wrap}
+.pill{display:inline-flex;align-items:center;gap:10px;font-weight:600;font-size:16px;padding:10px 20px;border-radius:999px;background:var(--sunk);color:var(--ink);border:1.5px solid transparent}
+.pill svg{width:22px;height:22px;flex:none}
+.pill.solid{background:var(--accent);color:var(--on-accent)}
+.pill.outline{background:transparent;border-color:var(--line)}
+.ticker{background:var(--surface);border-radius:26px;padding:22px 22px 8px;display:flex;flex-direction:column;gap:4px;box-shadow:var(--shadow)}
+.ticker-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:800;font-size:18px;padding-bottom:14px;border-bottom:1.5px dashed var(--line)}
+.ticker-head span:first-child{display:inline-flex;align-items:center;gap:8px}
+.live{display:inline-flex;gap:8px;align-items:center;font-size:16px;color:var(--go);font-weight:800}
+.live::before{content:"";width:14px;height:14px;border-radius:50%;background:var(--go);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.35}}
+.trow{display:grid;grid-template-columns:76px 1fr auto;gap:14px;align-items:center;padding:16px 0;border-bottom:1.5px dashed var(--line)}
+.trow:last-child{border-bottom:0}
+.thumb{width:76px;height:76px;border-radius:14px;display:grid;place-items:center}
+.thumb svg{width:40px;height:40px}
+.tinfo{display:flex;flex-direction:column;gap:3px;min-width:0}
+.tinfo b{font-weight:800;font-size:17px;line-height:1.25}
+.tinfo .sub{color:var(--muted);font-size:14px}
+.tmeta{display:flex;flex-wrap:wrap;gap:6px 12px;font-size:13.5px;margin-top:4px;color:var(--ink)}
+.tmeta span{display:inline-flex;align-items:center;gap:4px}
+.tmeta svg{width:16px;height:16px}
+.tend{display:flex;flex-direction:column;align-items:flex-end;gap:8px}
+.go-btn{width:44px;height:44px;border-radius:50%;border:1.5px solid var(--line);background:var(--surface);color:var(--ink);display:grid;place-items:center;cursor:pointer;text-decoration:none}
+.go-btn svg{width:20px;height:20px}
+.spots{font-size:13.5px;font-weight:800;color:var(--go)}
+.spots.low{color:var(--go)}
+@media (max-width:480px){.trow{grid-template-columns:64px 1fr auto}.thumb{width:64px;height:64px}}
 
 /* steps */
 .steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;counter-reset:s}
@@ -117,11 +141,11 @@ p{margin:0;max-width:62ch}
 .price b{font-family:var(--f-data);font-size:22px}
 .stamp{position:absolute;top:22px;font-family:var(--f-display);font-size:44px;font-weight:700;padding:0 12px;border:4px solid;border-radius:10px;opacity:0;transform:rotate(-12deg);z-index:2}
 .stamp.yes{right:18px;color:var(--go)}
-.stamp.no{left:18px;color:var(--accent);transform:rotate(12deg)}
+.stamp.no{left:18px;color:var(--muted);transform:rotate(12deg)}
 .actions{display:flex;justify-content:center;gap:18px;padding:12px 0 16px}
 .round{width:58px;height:58px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:24px;font-weight:800;cursor:pointer;display:grid;place-items:center;color:var(--ink)}
 .round.yes{background:var(--go);color:#fff;border-color:transparent;width:66px;height:66px}
-.round.no{color:var(--accent)}
+.round.no{color:var(--muted)}
 .empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px;border:2px dashed var(--line);border-radius:22px;color:var(--muted)}
 .btn{font:inherit;font-weight:800;font-size:15px;border:0;border-radius:12px;padding:12px 16px;cursor:pointer;background:var(--accent);color:var(--on-accent)}
 .btn.ghost{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
@@ -203,20 +227,33 @@ body{margin:0}[hidden]{display:none!important}img{max-width:100%}
 
 <!-- 1 -->
 <section class="band" id="s1">
+  <svg class="swoosh" viewBox="0 0 560 700" preserveAspectRatio="xMinYMin meet" aria-hidden="true">
+    <path class="sw" d="M-40 40 C 180 60, 330 180, 360 330 C 390 480, 300 600, 120 660 C 260 560, 300 440, 250 320 C 200 200, 90 120, -40 110 Z"/>
+    <path class="sw" opacity=".6" d="M-40 470 C 60 560, 160 620, 300 640 C 180 680, 40 650, -40 600 Z"/>
+    <g transform="translate(150 400) rotate(-35)">
+      <rect class="db" x="-70" y="-10" width="140" height="20" rx="8"/>
+      <rect class="db" x="-108" y="-46" width="30" height="92" rx="12"/>
+      <rect class="db2" x="-80" y="-34" width="16" height="68" rx="7"/>
+      <rect class="db" x="78" y="-46" width="30" height="92" rx="12"/>
+      <rect class="db2" x="64" y="-34" width="16" height="68" rx="7"/>
+    </g>
+    <line class="spark" x1="104" y1="256" x2="126" y2="300"/>
+    <line class="spark" x1="146" y1="240" x2="142" y2="290"/>
+  </svg>
   <div class="wrap">
     <div class="hero">
       <div style="display:flex;flex-direction:column;gap:22px;min-width:0">
         <div class="eyebrow">DROP-IN · STARTUP PITCH · 2026</div>
         <h1>רואים שיעור.<br><span class="swipe">מחליקים ימינה.</span><br>מתאמנים.</h1>
         <p class="lede">דרופ-אין היא "טינדר לאקטיביטי": מחפשים פעילות, ורואים מיד את כל השיעורים הפנויים <b>עכשיו</b> או <b>בעוד שעה</b>, ברדיוס שבחרתם. החדר כושר ממלא מקומות ריקים, המתאמן מקבל אימון בלי מנוי. אנחנו פותרים כל מה שבאמצע.</p>
-        <div style="display:flex;gap:8px;flex-wrap:wrap">
-          <span class="tag hot">מתחילים מחדרי כושר וסטודיואים</span>
-          <span class="tag">עברית, מובייל-first</span>
-          <span class="tag">מתחבר למערכות הקיימות</span>
+        <div class="pills">
+          <span class="pill solid"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="1" y="8" width="3" height="8" rx="1"/><rect x="5" y="5" width="4" height="14" rx="1.5"/><rect x="9" y="11" width="6" height="2"/><rect x="15" y="5" width="4" height="14" rx="1.5"/><rect x="20" y="8" width="3" height="8" rx="1"/></svg>מתחילים מחדרי כושר וסטודיואים</span>
+          <span class="pill"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><rect x="3" y="14" width="4" height="7" rx="1"/><rect x="10" y="9" width="4" height="12" rx="1"/><rect x="17" y="3" width="4" height="18" rx="1"/></svg>עברית, מובייל-first</span>
+          <span class="pill outline"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true"><path d="M12 2a7 7 0 0 0-7 7c0 5 7 13 7 13s7-8 7-13a7 7 0 0 0-7-7Zm0 9.5A2.5 2.5 0 1 1 12 6a2.5 2.5 0 0 1 0 5.5Z"/></svg>מתחבר למערכות הקיימות</span>
         </div>
       </div>
       <div class="ticker" aria-label="שיעורים פנויים עכשיו">
-        <div class="ticker-head"><span>פנוי עכשיו ליד פלורנטין</span><span class="live">חי</span></div>
+        <div class="ticker-head"><span>פנוי עכשיו ליד פלורנטין <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M15 6l-6 6 6 6"/></svg></span><span class="live">חי</span></div>
         <div id="ticker"></div>
         <div class="note">נתוני דוגמה לצורך המצגת</div>
       </div>
@@ -471,7 +508,21 @@ body{margin:0}[hidden]{display:none!important}img{max-width:100%}
 (function(){
 const ACTS=[["all","הכל"],["spin","ספינינג"],["yoga","יוגה"],["pilates","פילאטיס"],["hiit","HIIT"],["box","אגרוף"],["cross","קרוספיט"],["trx","TRX"]];
 const ACT_LABEL=Object.fromEntries(ACTS);
-const ART={spin:["#E2492F","#8A1D0E"],yoga:["#0D8A6E","#0A4B47"],pilates:["#6C5CE7","#2D2A7A"],hiit:["#D9831A","#7A3E07"],box:["#1F2A4D","#0A0F22"],cross:["#B23A48","#4E1020"],trx:["#2F7FB8","#103C63"]};
+const ART={spin:["#7FA65F","#2F5A2E"],yoga:["#A3B88A","#4F6B3C"],pilates:["#C2A982","#6E5638"],hiit:["#8DAF6B","#3E6A33"],box:["#3F5A40","#16261A"],cross:["#56704F","#1D3B22"],trx:["#9AB59A","#3E5E48"]};
+const ICON={
+ spin:'<circle cx="6" cy="17" r="4"/><circle cx="18" cy="17" r="4"/><path d="M6 17l5-8h5l2 8M11 9l-1-3H8M16 9h2"/>',
+ yoga:'<circle cx="12" cy="5" r="2"/><path d="M12 8v6M5 11l7 3 7-3M7 20l5-6 5 6"/>',
+ pilates:'<rect x="2" y="13" width="20" height="4" rx="1.5"/><path d="M5 17v3M19 17v3M7 13l4-5h4"/>',
+ hiit:'<path d="M13 2L5 13h6l-1 9 8-11h-6z"/>',
+ box:'<path d="M7 4h7a5 5 0 0 1 5 5v4a5 5 0 0 1-5 5H9a4 4 0 0 1-4-4V6a2 2 0 0 1 2-2zM5 12h6M9 18v3h6v-3"/>',
+ cross:'<path d="M9 6a3 3 0 0 1 6 0"/><path d="M8 8h8l2 4a6 6 0 1 1-12 0z"/>',
+ trx:'<path d="M12 2v6M12 8l-5 9M12 8l5 9M5 17h4M15 17h4"/>'
+};
+const ico=(d,w)=>`<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="${w||2}" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">${d}</svg>`;
+const I_PIN='<path d="M12 21s-7-7.5-7-12a7 7 0 0 1 14 0c0 4.5-7 12-7 12z"/><circle cx="12" cy="9" r="2.5"/>';
+const I_CLOCK='<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>';
+const I_PPL='<circle cx="9" cy="8" r="3"/><circle cx="17" cy="9" r="2.5"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M15 14.5c3 0 6 1.8 6 5.5"/>';
+const I_ARROW='<path d="M15 6l-6 6 6 6"/>';
 const GYMS=[
  {id:"g1",name:"סטודיו לב פלורנטין",area:"פלורנטין",sys:"Arbox"},
  {id:"g2",name:"סייקל 24",area:"רוטשילד",sys:"Boostapp"},
@@ -521,7 +572,12 @@ $("clock").textContent=hhmm(0);
 /* ticker */
 function renderTicker(){
  const list=C.filter(c=>c.pub&&c.off<=60&&free(c)>0).sort((a,b)=>a.off-b.off).slice(0,5);
- $("ticker").innerHTML=list.map(c=>`<div class="trow"><span class="t">${hhmm(c.off)}</span><span><b>${esc(c.title)}</b> · <span class="muted">${esc(G[c.gym].name)}, ${c.km} ק״מ</span></span><span class="spots ${free(c)<=3?"low":""}">${free(c)} מקומות</span></div>`).join("");
+ $("ticker").innerHTML=list.map(c=>{const [a,b]=ART[c.act];return `<div class="trow">
+  <span class="thumb" style="background:linear-gradient(140deg,${a},${b});color:#fff">${ico(ICON[c.act],1.8)}</span>
+  <span class="tinfo"><b>${esc(c.title)}</b><span class="sub">${esc(G[c.gym].name)}</span>
+   <span class="tmeta"><span>${ico(I_PIN)}${c.km} ק״מ</span><span>${ico(I_CLOCK)}<span class="num">${hhmm(c.off)}</span></span><span>${ico(I_PPL)}<span class="num">${c.booked}/${c.cap}</span></span></span></span>
+  <span class="tend"><span class="spots">${free(c)} מקומות</span><a class="go-btn" href="#s4" aria-label="להזמנה באפליקציה">${ico(I_ARROW,2.4)}</a></span>
+ </div>`;}).join("");
 }
 
 /* client */
