@@ -1,0 +1,678 @@
+<!doctype html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>דרופ-אין</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Karantina:wght@400;700&family=Assistant:wght@400;600;700;800&family=IBM+Plex+Mono:wght@500;600&display=swap">
+<style>
+/* Layout: a scrolling pitch deck — each section is one "slide" band; two live mockups (client phone, gym console) share one data model */
+:root{
+  --bg:#EDF0F5; --surface:#FFFFFF; --sunk:#F5F7FA; --ink:#101A35; --muted:#59647E; --line:#D6DCE7;
+  --accent:#E2492F; --accent-soft:#FBE3DD; --on-accent:#FFFFFF;
+  --go:#0D8A6E; --go-soft:#D8F1E9; --member:#9AA6BF; --phone:#101A35; --shadow:0 18px 40px -18px rgba(16,26,53,.35);
+  --f-display:"Karantina","Assistant",system-ui,sans-serif;
+  --f-body:"Assistant",system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
+  --f-data:"IBM Plex Mono",ui-monospace,Menlo,monospace;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0A1022; --surface:#131B34; --sunk:#0F1630; --ink:#E9EDF6; --muted:#9AA4BD; --line:#26314F;
+  --accent:#FF6B4F; --accent-soft:#3A1E1A; --on-accent:#14080A;
+  --go:#3CCB9F; --go-soft:#10362F; --member:#55617E; --phone:#04070E; --shadow:0 18px 40px -18px rgba(0,0,0,.7); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0A1022; --surface:#131B34; --sunk:#0F1630; --ink:#E9EDF6; --muted:#9AA4BD; --line:#26314F;
+  --accent:#FF6B4F; --accent-soft:#3A1E1A; --on-accent:#14080A;
+  --go:#3CCB9F; --go-soft:#10362F; --member:#55617E; --phone:#04070E; --shadow:0 18px 40px -18px rgba(0,0,0,.7); color-scheme:dark}
+
+body{background:var(--bg);color:var(--ink);font-family:var(--f-body);font-size:17px;line-height:1.55}
+.deck{direction:rtl}
+.band{padding-block:72px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));border-bottom:1px solid var(--line)}
+.band.alt{background:var(--surface)}
+.wrap{max-width:1120px;margin:0 auto;display:flex;flex-direction:column;gap:28px}
+.eyebrow{font-family:var(--f-data);font-size:12.5px;letter-spacing:.08em;color:var(--accent);text-transform:uppercase;direction:ltr;text-align:right}
+h1,h2,h3{margin:0;text-wrap:balance}
+h1{font-family:var(--f-display);font-weight:700;font-size:clamp(64px,11vw,132px);line-height:.86;letter-spacing:-.01em}
+h2{font-family:var(--f-display);font-weight:700;font-size:clamp(44px,6.4vw,76px);line-height:.92}
+h3{font-size:19px;font-weight:800}
+p{margin:0;max-width:62ch}
+.lede{font-size:clamp(18px,2.1vw,22px);color:var(--muted);max-width:56ch}
+.muted{color:var(--muted)}
+.note{font-size:13.5px;color:var(--muted)}
+.grid{display:grid;gap:20px}
+.g2{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.g3{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.g4{grid-template-columns:repeat(auto-fit,minmax(220px,1fr))}
+.box{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:22px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.band.alt .box{background:var(--sunk)}
+.tag{display:inline-flex;align-items:center;gap:6px;font-size:12.5px;font-weight:700;padding:3px 10px;border-radius:999px;background:var(--sunk);border:1px solid var(--line);color:var(--muted);width:fit-content}
+.tag.go{background:var(--go-soft);color:var(--go);border-color:transparent}
+.tag.hot{background:var(--accent-soft);color:var(--accent);border-color:transparent}
+.num{font-family:var(--f-data);font-variant-numeric:tabular-nums;direction:ltr;unicode-bidi:isolate}
+
+/* hero */
+.hero{display:grid;grid-template-columns:1.25fr 1fr;gap:40px;align-items:center}
+@media (max-width:860px){.hero{grid-template-columns:1fr}}
+.hero h1 .swipe{color:var(--accent)}
+.ticker{background:var(--surface);border:1px solid var(--line);border-radius:16px;padding:18px;display:flex;flex-direction:column;gap:10px;box-shadow:var(--shadow)}
+.ticker-head{display:flex;justify-content:space-between;align-items:center;gap:10px;font-weight:700}
+.live{display:inline-flex;gap:6px;align-items:center;font-size:13px;color:var(--go);font-weight:700}
+.live::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--go);animation:pulse 1.6s infinite}
+@keyframes pulse{50%{opacity:.25}}
+.trow{display:grid;grid-template-columns:auto 1fr auto;gap:12px;align-items:center;padding:10px 0;border-top:1px dashed var(--line)}
+.trow b{font-weight:700}
+.trow .t{font-family:var(--f-data);font-size:15px;direction:ltr}
+.spots{font-size:13px;font-weight:700;color:var(--go)}
+.spots.low{color:var(--accent)}
+
+/* steps */
+.steps{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:18px;counter-reset:s}
+.step{counter-increment:s;display:flex;flex-direction:column;gap:8px;padding-top:14px;border-top:3px solid var(--ink)}
+.step::before{content:counter(s);font-family:var(--f-display);font-size:56px;line-height:.8;color:var(--accent)}
+
+/* demo layout */
+.demo{display:grid;grid-template-columns:auto 1fr;gap:40px;align-items:start}
+@media (max-width:900px){.demo{grid-template-columns:1fr;justify-items:center}}
+.side{display:flex;flex-direction:column;gap:16px;min-width:0}
+.side ul{margin:0;padding-inline-start:20px;display:flex;flex-direction:column;gap:8px}
+
+/* phone */
+.phone{width:min(370px,100%);background:var(--phone);border-radius:44px;padding:12px;box-shadow:var(--shadow)}
+.screen{background:var(--bg);border-radius:34px;height:740px;overflow:hidden;position:relative;display:flex;flex-direction:column}
+.sbar{display:flex;justify-content:space-between;padding:12px 24px 4px;font-family:var(--f-data);font-size:12px;direction:ltr}
+.app-h{display:flex;justify-content:space-between;align-items:center;padding:6px 16px 10px}
+.logo{font-family:var(--f-display);font-weight:700;font-size:34px;line-height:1}
+.logo i{font-style:normal;color:var(--accent)}
+.loc{font-size:12.5px;color:var(--muted);text-align:left}
+.loc b{display:block;color:var(--ink);font-size:13.5px}
+.search{margin:0 16px;display:flex;align-items:center;gap:8px;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:8px 12px}
+.search input{border:0;outline:0;background:transparent;font:inherit;font-size:15px;color:var(--ink);width:100%;direction:rtl}
+.chips{display:flex;gap:6px;overflow-x:auto;padding:10px 16px 4px;scrollbar-width:none}
+.chips::-webkit-scrollbar{display:none}
+.chip{flex:none;font:inherit;font-size:13.5px;font-weight:700;padding:5px 12px;border-radius:999px;border:1px solid var(--line);background:var(--surface);color:var(--ink);cursor:pointer}
+.chip[aria-pressed="true"]{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.filters{display:flex;gap:10px;align-items:center;padding:8px 16px}
+.seg{display:flex;background:var(--sunk);border:1px solid var(--line);border-radius:10px;padding:2px;flex:none}
+.seg button{font:inherit;font-size:12.5px;font-weight:700;border:0;background:transparent;color:var(--muted);padding:5px 9px;border-radius:8px;cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink);box-shadow:0 1px 3px rgba(0,0,0,.15)}
+.radius{flex:1;display:flex;flex-direction:column;font-size:12px;color:var(--muted);min-width:0}
+.radius input{width:100%;accent-color:var(--accent)}
+.count{padding:2px 16px 8px;font-size:13px;color:var(--muted)}
+.stack{position:relative;flex:1;margin:0 16px}
+.card{position:absolute;inset:0;background:var(--surface);border:1px solid var(--line);border-radius:22px;display:flex;flex-direction:column;overflow:hidden;touch-action:none;user-select:none;cursor:grab;transition:transform .25s ease}
+.card.dragging{transition:none;cursor:grabbing}
+.card:nth-child(2){transform:scale(.95) translateY(12px)}
+.card:nth-child(3){transform:scale(.9) translateY(24px)}
+.art{height:150px;position:relative;display:flex;align-items:flex-end;padding:14px;color:#fff}
+.art .act{font-family:var(--f-display);font-size:52px;line-height:.8;font-weight:700;position:relative}
+.art .in{position:absolute;top:12px;left:12px;background:rgba(0,0,0,.35);padding:3px 10px;border-radius:999px;font-weight:700;font-size:13px}
+.cbody{padding:14px 16px;display:flex;flex-direction:column;gap:8px;flex:1}
+.cbody .gym{font-weight:800;font-size:18px;line-height:1.2}
+.meta{display:grid;grid-template-columns:1fr 1fr;gap:8px;font-size:13.5px}
+.meta div{background:var(--sunk);border-radius:10px;padding:7px 10px}
+.meta small{display:block;color:var(--muted);font-size:11.5px}
+.price{display:flex;justify-content:space-between;align-items:center;margin-top:auto}
+.price b{font-family:var(--f-data);font-size:22px}
+.stamp{position:absolute;top:22px;font-family:var(--f-display);font-size:44px;font-weight:700;padding:0 12px;border:4px solid;border-radius:10px;opacity:0;transform:rotate(-12deg);z-index:2}
+.stamp.yes{right:18px;color:var(--go)}
+.stamp.no{left:18px;color:var(--accent);transform:rotate(12deg)}
+.actions{display:flex;justify-content:center;gap:18px;padding:12px 0 16px}
+.round{width:58px;height:58px;border-radius:50%;border:1px solid var(--line);background:var(--surface);font-size:24px;font-weight:800;cursor:pointer;display:grid;place-items:center;color:var(--ink)}
+.round.yes{background:var(--go);color:#fff;border-color:transparent;width:66px;height:66px}
+.round.no{color:var(--accent)}
+.empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;text-align:center;padding:20px;border:2px dashed var(--line);border-radius:22px;color:var(--muted)}
+.btn{font:inherit;font-weight:800;font-size:15px;border:0;border-radius:12px;padding:12px 16px;cursor:pointer;background:var(--accent);color:var(--on-accent)}
+.btn.ghost{background:var(--sunk);color:var(--ink);border:1px solid var(--line)}
+button:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+
+.sheet{position:absolute;inset:auto 0 0 0;background:var(--surface);border-radius:24px 24px 0 0;padding:18px 18px 22px;display:flex;flex-direction:column;gap:12px;box-shadow:0 -10px 30px rgba(0,0,0,.25);z-index:5;max-height:88%;overflow:auto}
+.scrim{position:absolute;inset:0;background:rgba(5,8,18,.45);z-index:4}
+.line{display:flex;justify-content:space-between;gap:10px;font-size:14.5px;padding:6px 0;border-bottom:1px solid var(--line)}
+.check{display:flex;gap:10px;align-items:flex-start;font-size:13.5px}
+.check input{margin-top:4px;accent-color:var(--go)}
+.ticket{display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center}
+.ticket canvas{width:150px;height:150px;image-rendering:pixelated;border-radius:8px;background:#fff;padding:8px}
+.row2{display:flex;gap:8px}
+.row2 .btn{flex:1}
+
+/* gym console */
+.console{background:var(--surface);border:1px solid var(--line);border-radius:18px;box-shadow:var(--shadow);overflow:hidden;width:100%}
+.ch{display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:12px;padding:16px 20px;border-bottom:1px solid var(--line);background:var(--sunk)}
+.ch select{font:inherit;font-weight:800;font-size:17px;background:var(--surface);color:var(--ink);border:1px solid var(--line);border-radius:10px;padding:6px 10px}
+.kpis{display:grid;grid-template-columns:repeat(4,1fr);border-bottom:1px solid var(--line)}
+@media (max-width:640px){.kpis{grid-template-columns:repeat(2,1fr)}}
+.kpi{padding:14px 20px;border-inline-start:1px solid var(--line)}
+.kpi:first-child{border-inline-start:0}
+.kpi small{color:var(--muted);font-size:12.5px;display:block}
+.kpi b{font-family:var(--f-data);font-size:26px;font-variant-numeric:tabular-nums}
+.cbody2{display:grid;grid-template-columns:1.6fr 1fr;gap:0}
+@media (max-width:900px){.cbody2{grid-template-columns:1fr}}
+.sched{padding:16px 20px;display:flex;flex-direction:column;gap:6px;min-width:0;overflow-x:auto}
+.srow{display:grid;grid-template-columns:52px 1fr 150px 74px 60px;gap:12px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line);font-size:14.5px;min-width:520px}
+.srow.head{font-size:12px;color:var(--muted);font-weight:700;padding-top:0}
+.cap{display:flex;height:12px;border-radius:6px;overflow:hidden;background:var(--sunk);border:1px solid var(--line)}
+.cap i{display:block}
+.cap .m{background:var(--member)}
+.cap .d{background:var(--accent)}
+.capt{font-size:11.5px;color:var(--muted);margin-top:3px}
+.price-in{width:64px;font:inherit;font-family:var(--f-data);font-size:14px;padding:4px 6px;border:1px solid var(--line);border-radius:8px;background:var(--surface);color:var(--ink);direction:ltr}
+.switch{position:relative;width:44px;height:24px;appearance:none;background:var(--line);border-radius:999px;cursor:pointer;transition:background .2s}
+.switch::after{content:"";position:absolute;top:3px;right:3px;width:18px;height:18px;border-radius:50%;background:#fff;transition:right .2s}
+.switch:checked{background:var(--go)}
+.switch:checked::after{right:23px}
+.feed{padding:16px 20px;border-inline-start:1px solid var(--line);display:flex;flex-direction:column;gap:10px;min-width:0}
+@media (max-width:900px){.feed{border-inline-start:0;border-top:1px solid var(--line)}}
+.fi{display:flex;flex-direction:column;gap:2px;padding:10px 12px;border-radius:10px;background:var(--sunk);font-size:14px}
+.fi.new{background:var(--go-soft);animation:pop .5s ease}
+@keyframes pop{from{transform:translateY(-6px);opacity:.3}}
+.fi small{color:var(--muted)}
+.rules{display:flex;flex-direction:column;gap:8px;padding-top:6px;border-top:1px solid var(--line);font-size:13.5px}
+.rules label{display:flex;justify-content:space-between;gap:10px;align-items:center}
+.legend{display:flex;gap:14px;font-size:12px;color:var(--muted);flex-wrap:wrap}
+.legend span::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-inline-end:5px;vertical-align:-1px;background:var(--c)}
+
+/* integrations */
+.flow{display:grid;grid-template-columns:1fr auto 1.1fr auto 1fr;gap:14px;align-items:stretch}
+@media (max-width:900px){.flow{grid-template-columns:1fr}.arrow{transform:rotate(90deg);justify-self:center}}
+.col{display:flex;flex-direction:column;gap:8px}
+.sys{background:var(--surface);border:1px solid var(--line);border-radius:10px;padding:9px 12px;display:flex;justify-content:space-between;gap:8px;font-weight:700;font-size:15px}
+.sys small{font-weight:600;color:var(--muted);font-size:12px}
+.core{background:var(--ink);color:var(--bg);border-radius:16px;padding:20px;display:flex;flex-direction:column;gap:8px}
+.core .logo{font-size:40px}
+.core ul{margin:0;padding-inline-start:18px;font-size:14.5px;display:flex;flex-direction:column;gap:4px}
+.arrow{align-self:center;font-family:var(--f-data);font-size:22px;color:var(--accent);direction:ltr}
+.tbl{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--surface)}
+table{border-collapse:collapse;width:100%;min-width:720px;font-size:14.5px}
+th,td{text-align:right;padding:11px 14px;border-bottom:1px solid var(--line);vertical-align:top}
+th{font-size:12.5px;color:var(--muted);background:var(--sunk)}
+tr:last-child td{border-bottom:0}
+
+/* deck nav */
+.pager{position:fixed;bottom:0;left:0;z-index:20;padding:0 0 calc(16px + env(safe-area-inset-bottom,0px)) calc(16px + env(safe-area-inset-left,0px));display:flex;gap:6px;align-items:center;direction:ltr}
+.pager button{width:40px;height:40px;border-radius:50%;border:1px solid var(--line);background:var(--surface);color:var(--ink);font-size:18px;cursor:pointer;box-shadow:var(--shadow)}
+.pager span{font-family:var(--f-data);font-size:12px;background:var(--surface);border:1px solid var(--line);padding:6px 10px;border-radius:999px;color:var(--muted)}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+body{margin:0}[hidden]{display:none!important}img{max-width:100%}
+</style>
+</head>
+<body>
+
+<div class="deck">
+
+<!-- 1 -->
+<section class="band" id="s1">
+  <div class="wrap">
+    <div class="hero">
+      <div style="display:flex;flex-direction:column;gap:22px;min-width:0">
+        <div class="eyebrow">DROP-IN · STARTUP PITCH · 2026</div>
+        <h1>רואים שיעור.<br><span class="swipe">מחליקים ימינה.</span><br>מתאמנים.</h1>
+        <p class="lede">דרופ-אין היא "טינדר לאקטיביטי": מחפשים פעילות, ורואים מיד את כל השיעורים הפנויים <b>עכשיו</b> או <b>בעוד שעה</b>, ברדיוס שבחרתם. החדר כושר ממלא מקומות ריקים, המתאמן מקבל אימון בלי מנוי. אנחנו פותרים כל מה שבאמצע.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap">
+          <span class="tag hot">מתחילים מחדרי כושר וסטודיואים</span>
+          <span class="tag">עברית, מובייל-first</span>
+          <span class="tag">מתחבר למערכות הקיימות</span>
+        </div>
+      </div>
+      <div class="ticker" aria-label="שיעורים פנויים עכשיו">
+        <div class="ticker-head"><span>פנוי עכשיו ליד פלורנטין</span><span class="live">חי</span></div>
+        <div id="ticker"></div>
+        <div class="note">נתוני דוגמה לצורך המצגת</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 2 -->
+<section class="band alt" id="s2">
+  <div class="wrap">
+    <div class="eyebrow">01 · THE PROBLEM</div>
+    <h2>שני צדדים, אותו שיעור, אף אחד לא נפגש</h2>
+    <div class="grid g2">
+      <div class="box">
+        <span class="tag">המתאמן</span>
+        <h3>"בא לי ספינינג עכשיו. איפה יש מקום?"</h3>
+        <p class="muted">צריך לפתוח חמש אפליקציות של חמישה סטודיואים, להירשם לכל אחד, למלא הצהרת בריאות בכל פעם, ולגלות שאין שיעור ניסיון בודד בלי מנוי שנתי. בסוף לא הולכים.</p>
+      </div>
+      <div class="box">
+        <span class="tag">החדר כושר / הסטודיו</span>
+        <h3>"יש לי 6 אופניים ריקים בשיעור של 18:30"</h3>
+        <p class="muted">שיעור שמתחיל עם מקומות ריקים זה הכנסה שנעלמה. אין ערוץ מהיר שמביא לקוח חדש לשעה הקרובה, ופרסום רגיל לא עובד בטווח של 60 דקות.</p>
+      </div>
+    </div>
+    <p class="note">הנחת עבודה לבדיקה בשלב הגילוי: חלק משמעותי מהמקומות בשיעורים קבוצתיים נשאר ריק. נמדוד את זה בפועל מול 10–15 סטודיואים ראשונים.</p>
+  </div>
+</section>
+
+<!-- 3 -->
+<section class="band" id="s3">
+  <div class="wrap">
+    <div class="eyebrow">02 · HOW IT WORKS</div>
+    <h2>מחיפוש לצ׳ק-אין בפחות מדקה</h2>
+    <div class="steps">
+      <div class="step"><h3>בוחרים פעילות</h3><p class="muted">יוגה, ספינינג, פילאטיס, אגרוף... או מקלידים חופשי.</p></div>
+      <div class="step"><h3>זמן ורדיוס</h3><p class="muted">עכשיו, בעוד שעה או היום. רדיוס 1–10 ק״מ מהמיקום.</p></div>
+      <div class="step"><h3>מחליקים</h3><p class="muted">ימינה להזמנה, שמאלה לדלג. כל כרטיס הוא שיעור אמיתי עם מקום פנוי.</p></div>
+      <div class="step"><h3>מגיעים</h3><p class="muted">תשלום, הצהרת בריאות וכרטיס QR כבר בכיס. סורקים בכניסה.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 4 client -->
+<section class="band alt" id="s4">
+  <div class="wrap">
+    <div class="eyebrow">03 · CLIENT APP — LIVE MOCKUP</div>
+    <h2>צד הלקוח</h2>
+    <div class="demo">
+      <div class="phone">
+        <div class="screen" id="screen">
+          <div class="sbar"><span id="clock">18:04</span><span>5G ▮▮▮</span></div>
+          <div class="app-h">
+            <div class="logo">דרופ<i>·</i>אין</div>
+            <div class="loc">המיקום שלך<b>פלורנטין, תל אביב</b></div>
+          </div>
+          <label class="search"><span aria-hidden="true">⌕</span><input id="q" type="search" placeholder="מה בא לך לעשות?" aria-label="חיפוש פעילות"></label>
+          <div class="chips" id="chips" role="group" aria-label="סוג פעילות"></div>
+          <div class="filters">
+            <div class="seg" id="when" role="group" aria-label="מתי">
+              <button data-w="now" aria-pressed="true">עכשיו</button>
+              <button data-w="hour" aria-pressed="false">בעוד שעה</button>
+              <button data-w="today" aria-pressed="false">היום</button>
+            </div>
+            <label class="radius"><span>רדיוס: <b class="num" id="rv">3</b> ק״מ</span><input id="r" type="range" min="1" max="10" value="3"></label>
+          </div>
+          <div class="count" id="count"></div>
+          <div class="stack" id="stack"></div>
+          <div class="actions">
+            <button class="round no" id="noBtn" aria-label="דלג">✕</button>
+            <button class="round yes" id="yesBtn" aria-label="הזמן">✓</button>
+          </div>
+          <div class="scrim" id="scrim" hidden></div>
+          <div class="sheet" id="sheet" hidden></div>
+        </div>
+      </div>
+      <div class="side">
+        <h3>נסו בעצמכם</h3>
+        <ul class="muted">
+          <li>בחרו פעילות או הקלידו (למשל "יוגה").</li>
+          <li>החליפו בין <b>עכשיו</b> / <b>בעוד שעה</b> / <b>היום</b> והזיזו את הרדיוס.</li>
+          <li>גררו כרטיס ימינה כדי להזמין, שמאלה כדי לדלג.</li>
+          <li>אחרי ההזמנה, גללו לקונסולת הסטודיו: ההזמנה מופיעה שם בזמן אמת.</li>
+        </ul>
+        <div class="box">
+          <h3>מה הלקוח לא צריך לעשות</h3>
+          <p class="muted">להירשם לכל סטודיו בנפרד, למלא הצהרת בריאות שוב ושוב, להתחייב למנוי, או להתקשר לברר אם יש מקום.</p>
+        </div>
+        <div class="box">
+          <h3>הכרטיס מציג רק מה שחשוב ברגע</h3>
+          <p class="muted">מתי מתחיל ובעוד כמה דקות, כמה זמן הליכה, כמה מקומות נשארו, רמה, מאמן ומחיר לשיעור בודד.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- 5 gym -->
+<section class="band" id="s5">
+  <div class="wrap">
+    <div class="eyebrow">04 · GYM CONSOLE — LIVE MOCKUP</div>
+    <h2>צד החדר כושר</h2>
+    <p class="lede">הסטודיו ממשיך לעבוד במערכת שלו. דרופ-אין קורא את מערכת השעות, מציע רק את המקומות שהסטודיו שחרר, ומחזיר כל הזמנה למערכת כדי שלא תהיה כפל הזמנה.</p>
+    <div class="console">
+      <div class="ch">
+        <select id="gymSel" aria-label="בחירת סטודיו"></select>
+        <span class="tag go" id="sync"></span>
+      </div>
+      <div class="kpis" id="kpis"></div>
+      <div class="cbody2">
+        <div class="sched">
+          <div class="legend"><span style="--c:var(--member)">מנויים (מהמערכת שלכם)</span><span style="--c:var(--accent)">דרופ-אין</span><span style="--c:var(--sunk)">פנוי</span></div>
+          <div class="srow head"><span>שעה</span><span>שיעור</span><span>תפוסה</span><span>מחיר ₪</span><span>פרסום</span></div>
+          <div id="rows"></div>
+        </div>
+        <div class="feed">
+          <h3>הזמנות נכנסות</h3>
+          <div id="feed" style="display:flex;flex-direction:column;gap:8px"></div>
+          <div class="rules">
+            <b>כללים אוטומטיים</b>
+            <label>לפרסם אוטומטית מקומות פנויים <select id="r1" aria-label="זמן פרסום אוטומטי"><option>3 שעות לפני</option><option>שעה לפני</option><option>כבוי</option></select></label>
+            <label>הנחת רגע אחרון (30 דק׳ לפני) <select id="r2" aria-label="הנחת רגע אחרון"><option>15%</option><option>25%</option><option>ללא</option></select></label>
+            <label>מקסימום דרופ-אין לשיעור <select id="r3" aria-label="מקסימום לשיעור"><option>4</option><option>2</option><option>ללא הגבלה</option></select></label>
+          </div>
+        </div>
+      </div>
+    </div>
+    <p class="note">כבו "פרסום" לשיעור והוא ייעלם מאפליקציית הלקוח למעלה. שנו מחיר והכרטיס מתעדכן. הכנסה מוצגת נטו אחרי עמלה של 15% (הנחה למצגת).</p>
+  </div>
+</section>
+
+<!-- 6 middle -->
+<section class="band alt" id="s6">
+  <div class="wrap">
+    <div class="eyebrow">05 · WE SOLVE THE MIDDLE</div>
+    <h2>כל מה שבאמצע, עלינו</h2>
+    <div class="grid g3">
+      <div class="box"><span class="tag">תשלום</span><h3>סליקה אחת, תשלום מרוכז לסטודיו</h3><p class="muted">הלקוח משלם בדרופ-אין (כרטיס שמור / Apple Pay / Bit). הסטודיו מקבל העברה חודשית עם דוח התאמה וחשבונית על העמלה.</p></div>
+      <div class="box"><span class="tag">הצהרת בריאות</span><h3>חותמים פעם אחת</h3><p class="muted">הצהרה דיגיטלית אחת, מתועדת עם תאריך, ומועברת לכל סטודיו שהלקוח מזמין אליו. תזכורת חידוש אוטומטית. נוסח ודרישות ייבדקו מול יועץ משפטי.</p></div>
+      <div class="box"><span class="tag">צ׳ק-אין</span><h3>QR בכניסה</h3><p class="muted">סריקה מהטאבלט בקבלה או מאפליקציית הסטודיו. ההגעה מסונכרנת חזרה למערכת הניהול שלהם.</p></div>
+      <div class="box"><span class="tag">ביטולים והברזות</span><h3>מדיניות אחת וברורה</h3><p class="muted">ביטול חינם עד 30 דק׳ לפני. אי-הגעה מחויבת. אם הסטודיו מבטל: החזר מיידי והצעה לשיעור חלופי קרוב.</p></div>
+      <div class="box"><span class="tag">זמינות אמיתית</span><h3>אין כפל הזמנות</h3><p class="muted">נעילת מקום לכמה שניות בזמן התשלום וכתיבה מיידית למערכת של הסטודיו. אם הסנכרון נכשל, ההזמנה לא נסגרת.</p></div>
+      <div class="box"><span class="tag">אמון</span><h3>דירוגים ותמיכה</h3><p class="muted">דירוג אחרי כל שיעור, צ׳אט תמיכה בעברית, ואימות סטודיו לפני עלייה לאוויר.</p></div>
+    </div>
+  </div>
+</section>
+
+<!-- 7 integrations -->
+<section class="band" id="s7">
+  <div class="wrap">
+    <div class="eyebrow">06 · INTEGRATIONS</div>
+    <h2>מתחברים למה שכבר עובד</h2>
+    <p class="lede">כמו ש-Booking.com מתחבר למערכות של בתי מלון, דרופ-אין הוא "Channel Manager" לחדרי כושר. הסטודיו לא מחליף מערכת ולא מעדכן שני לוחות.</p>
+    <div class="flow">
+      <div class="col">
+        <b class="muted" style="font-size:13px">מערכות הסטודיו</b>
+        <div class="sys">Arbox <small>ישראל</small></div>
+        <div class="sys">Boostapp <small>ישראל</small></div>
+        <div class="sys">Mindbody <small>בינ״ל</small></div>
+        <div class="sys">Glofox <small>בינ״ל</small></div>
+        <div class="sys">Wix Bookings <small>אתרים</small></div>
+        <div class="sys">Google Calendar / iCal <small>גיבוי</small></div>
+      </div>
+      <div class="arrow">⇄</div>
+      <div class="core">
+        <div class="logo">דרופ<i>·</i>אין</div>
+        <b>שכבת חיבור + מנוע זמינות</b>
+        <ul>
+          <li>קריאת מערכת שעות ותפוסה (API / Webhooks / סנכרון כל דקה)</li>
+          <li>כתיבת הזמנה חזרה כ"אורח" במערכת הסטודיו</li>
+          <li>תמחור, כללי שחרור מקומות, נעילת מקום</li>
+          <li>תשלומים, הצהרת בריאות, צ׳ק-אין</li>
+          <li>ממשק ידני לסטודיו בלי מערכת</li>
+        </ul>
+      </div>
+      <div class="arrow">⇄</div>
+      <div class="col">
+        <b class="muted" style="font-size:13px">ערוצים ללקוח</b>
+        <div class="sys">אפליקציית דרופ-אין <small>iOS / Android / PWA</small></div>
+        <div class="sys">וידג׳ט באתר הסטודיו <small>"מקומות פנויים עכשיו"</small></div>
+        <div class="sys">הטבות לעובדים <small>B2B, שלב 3</small></div>
+      </div>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th>מערכת</th><th>אופן חיבור מתוכנן</th><th>מה קוראים</th><th>מה כותבים חזרה</th><th>סטטוס</th></tr></thead>
+        <tbody>
+          <tr><td><b>Arbox</b></td><td>שותפות / API של הספק</td><td>מערכת שעות, תפוסה, מגבלות</td><td>הזמנת אורח, ביטול, הגעה</td><td><span class="tag hot">לאמת מול הספק</span></td></tr>
+          <tr><td><b>Boostapp</b></td><td>שותפות / API של הספק</td><td>מערכת שעות, תפוסה</td><td>הזמנת אורח, ביטול</td><td><span class="tag hot">לאמת מול הספק</span></td></tr>
+          <tr><td><b>Mindbody</b></td><td>Public API</td><td>Classes, availability</td><td>Add client to class</td><td><span class="tag">יש API ציבורי, דורש אישור מפתח</span></td></tr>
+          <tr><td><b>Glofox</b></td><td>Partner API</td><td>Classes, capacity</td><td>Bookings</td><td><span class="tag hot">לאמת מול הספק</span></td></tr>
+          <tr><td><b>Wix Bookings</b></td><td>REST API + Webhooks</td><td>Services, availability</td><td>Bookings</td><td><span class="tag">יש API ציבורי</span></td></tr>
+          <tr><td><b>ללא מערכת</b></td><td>קונסולת דרופ-אין / iCal</td><td>מה שהסטודיו מזין</td><td>התראה בוואטסאפ/מייל</td><td><span class="tag go">זמין מהיום הראשון</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">הגישה: להתחיל בממשק ידני כדי לצאת מהר, ואז לבנות חיבור למערכת שמחזיקה הכי הרבה סטודיואים בפיילוט.</p>
+  </div>
+</section>
+
+<!-- 8 model -->
+<section class="band alt" id="s8">
+  <div class="wrap">
+    <div class="eyebrow">07 · BUSINESS MODEL & MARKET</div>
+    <h2>מרוויחים רק כשהסטודיו מרוויח</h2>
+    <div class="grid g3">
+      <div class="box"><span class="tag go">עמלה</span><h3>15–20% מכל הזמנה</h3><p class="muted">בלי דמי הצטרפות לסטודיו. מקום שהיה נשאר ריק הופך להכנסה.</p></div>
+      <div class="box"><span class="tag">Pro לסטודיו</span><h3>כלים בתשלום חודשי</h3><p class="muted">הבלטה בחיפוש, תמחור דינמי, וידג׳ט לאתר ודוחות על לקוחות חדשים.</p></div>
+      <div class="box"><span class="tag">B2B</span><h3>הטבות לעובדים</h3><p class="muted">חברות קונות קרדיטים לעובדים. שלב מאוחר, אחרי שיש היצע בעיר.</p></div>
+    </div>
+    <div class="tbl">
+      <table>
+        <thead><tr><th></th><th>דרופ-אין</th><th>ClassPass</th><th>Wellhub (Gympass)</th><th>Arbox / Boostapp</th></tr></thead>
+        <tbody>
+          <tr><td><b>מה זה</b></td><td>שוק בזמן אמת לשיעור בודד</td><td>מנוי קרדיטים</td><td>הטבה דרך המעסיק</td><td>מערכת ניהול לסטודיו</td></tr>
+          <tr><td><b>"עכשיו / בעוד שעה"</b></td><td>הליבה של המוצר</td><td>חלקי</td><td>חלקי</td><td>רק ללקוחות של אותו סטודיו</td></tr>
+          <tr><td><b>מנוי חובה ללקוח</b></td><td>לא</td><td>כן</td><td>דרך המעסיק</td><td>בדרך כלל</td></tr>
+          <tr><td><b>היחס אלינו</b></td><td></td><td>מתחרה</td><td>מתחרה / ערוץ עתידי</td><td>שותף אינטגרציה</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="note">השוואה ראשונית לפי מידע ציבורי. לבדוק נוכחות ותנאים עדכניים בישראל לפני הצגה למשקיעים.</p>
+  </div>
+</section>
+
+<!-- 9 plan -->
+<section class="band" id="s9">
+  <div class="wrap">
+    <div class="eyebrow">08 · GO-TO-MARKET</div>
+    <h2>מתחילים בשכונה אחת בתל אביב</h2>
+    <div class="steps">
+      <div class="step"><h3>חודשים 1–3: פיילוט</h3><p class="muted">15 סטודיואים בפלורנטין, רוטשילד ויפו. קונסולה ידנית + PWA. תשלום דרך קישור.</p></div>
+      <div class="step"><h3>חודשים 4–6: חיבור ראשון</h3><p class="muted">אינטגרציה למערכת הנפוצה בפיילוט, סליקה מלאה, הצהרת בריאות דיגיטלית, דירוגים.</p></div>
+      <div class="step"><h3>חודשים 7–12: התרחבות</h3><p class="muted">100+ סטודיואים בגוש דן, תמחור דינמי, וידג׳ט לאתרים, חיבור מערכת שנייה.</p></div>
+      <div class="step"><h3>שנה 2: B2B וערים</h3><p class="muted">הטבות לעובדים, חיפה וירושלים, פעילויות מחוץ לחדר כושר (סאפ, טניס, ריצה).</p></div>
+    </div>
+    <div class="grid g3">
+      <div class="box"><span class="tag">מדד 1</span><h3>% מקומות ריקים שמולאו</h3><p class="muted">המדד שהסטודיו מרגיש בכיס.</p></div>
+      <div class="box"><span class="tag">מדד 2</span><h3>זמן מחיפוש להזמנה</h3><p class="muted">יעד: מתחת ל-60 שניות.</p></div>
+      <div class="box"><span class="tag">מדד 3</span><h3>לקוחות שחוזרים תוך 30 יום</h3><p class="muted">מוכיח שזה הרגל ולא ניסיון חד-פעמי.</p></div>
+    </div>
+  </div>
+</section>
+</div>
+
+<nav class="pager" aria-label="ניווט במצגת">
+  <button id="prev" aria-label="שקופית קודמת">↑</button>
+  <button id="next" aria-label="שקופית הבאה">↓</button>
+  <span id="pos">1 / 9</span>
+</nav>
+
+<script>
+(function(){
+const ACTS=[["all","הכל"],["spin","ספינינג"],["yoga","יוגה"],["pilates","פילאטיס"],["hiit","HIIT"],["box","אגרוף"],["cross","קרוספיט"],["trx","TRX"]];
+const ACT_LABEL=Object.fromEntries(ACTS);
+const ART={spin:["#E2492F","#8A1D0E"],yoga:["#0D8A6E","#0A4B47"],pilates:["#6C5CE7","#2D2A7A"],hiit:["#D9831A","#7A3E07"],box:["#1F2A4D","#0A0F22"],cross:["#B23A48","#4E1020"],trx:["#2F7FB8","#103C63"]};
+const GYMS=[
+ {id:"g1",name:"סטודיו לב פלורנטין",area:"פלורנטין",sys:"Arbox"},
+ {id:"g2",name:"סייקל 24",area:"רוטשילד",sys:"Boostapp"},
+ {id:"g3",name:"בית היוגה יפו",area:"יפו",sys:"Wix Bookings"},
+ {id:"g4",name:"בוקס דרום",area:"מונטיפיורי",sys:"Arbox"},
+ {id:"g5",name:"הזירה",area:"נווה צדק",sys:"ידני"},
+ {id:"g6",name:"Core Reformer",area:"הצפון הישן",sys:"Mindbody"}
+];
+const G=Object.fromEntries(GYMS.map(g=>[g.id,g]));
+// offset = minutes from now; booked includes members; drop = drop-in bookings already
+let C=[
+ ["g1","pilates","פילאטיס מכשירים",25,50,10,7,1,65,0.6,"מאיה","מתחילים"],
+ ["g1","trx","TRX עוצמה",70,45,12,6,2,45,0.6,"עידו","בינוני"],
+ ["g1","yoga","יוגה ערב רגועה",150,60,14,5,0,40,0.6,"שירה","כל הרמות"],
+ ["g2","spin","ספינינג 45",20,45,24,18,3,45,1.2,"רון","כל הרמות"],
+ ["g2","spin","ספינינג ריתמוס",85,45,24,10,1,50,1.2,"נוי","בינוני"],
+ ["g2","hiit","HIIT על אופניים",200,30,20,12,0,40,1.2,"רון","מתקדמים"],
+ ["g3","yoga","ויניאסה פלואו",35,60,18,11,2,55,1.9,"תמר","בינוני"],
+ ["g3","yoga","יין יוגה",100,75,16,9,0,50,1.9,"אורי","כל הרמות"],
+ ["g4","cross","WOD קרוספיט",15,60,16,13,1,60,0.9,"גיל","בינוני"],
+ ["g4","hiit","HIIT 30",65,30,20,8,2,40,0.9,"דנה","כל הרמות"],
+ ["g4","cross","אולימפי טכניקה",180,60,10,4,0,60,0.9,"גיל","מתקדמים"],
+ ["g5","box","אגרוף למתחילים",40,60,14,7,1,55,1.6,"אבי","מתחילים"],
+ ["g5","box","קיקבוקס ספארינג",110,60,12,9,0,60,1.6,"אבי","מתקדמים"],
+ ["g6","pilates","רפורמר 50",30,50,8,6,0,85,4.2,"ליאור","בינוני"],
+ ["g6","pilates","רפורמר מתחילים",95,50,8,3,1,80,4.2,"ליאור","מתחילים"],
+ ["g6","trx","TRX + קור",240,45,12,4,0,50,4.2,"יעל","כל הרמות"]
+].map((r,i)=>({id:"c"+i,gym:r[0],act:r[1],title:r[2],off:r[3],dur:r[4],cap:r[5],booked:r[6],drop:r[7],price:r[8],km:r[9],coach:r[10],level:r[11],pub:true}));
+
+const base=(()=>{const d=new Date();d.setSeconds(0,0);return d.getTime();})();
+const hhmm=off=>{const d=new Date(base+off*60000);d.setMinutes(Math.round(d.getMinutes()/5)*5);return String(d.getHours()).padStart(2,"0")+":"+String(d.getMinutes()).padStart(2,"0");};
+const walk=km=>Math.round(km*12);
+const free=c=>c.cap-c.booked;
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[m]));
+
+const st={act:"all",when:"now",r:3,q:"",skipped:new Set()};
+const feed=[
+ {t:"לפני 12 דק׳",txt:"נועה כ׳ הזמינה פילאטיס מכשירים",gym:"g1",price:65},
+ {t:"לפני 40 דק׳",txt:"תומר א׳ הזמין TRX עוצמה",gym:"g1",price:45},
+ {t:"לפני שעה",txt:"מיכל ש׳ הזמינה TRX עוצמה",gym:"g1",price:45},
+ {t:"לפני 20 דק׳",txt:"אלון ב׳ הזמין ספינינג 45",gym:"g2",price:45}
+];
+
+$("clock").textContent=hhmm(0);
+
+/* ticker */
+function renderTicker(){
+ const list=C.filter(c=>c.pub&&c.off<=60&&free(c)>0).sort((a,b)=>a.off-b.off).slice(0,5);
+ $("ticker").innerHTML=list.map(c=>`<div class="trow"><span class="t">${hhmm(c.off)}</span><span><b>${esc(c.title)}</b> · <span class="muted">${esc(G[c.gym].name)}, ${c.km} ק״מ</span></span><span class="spots ${free(c)<=3?"low":""}">${free(c)} מקומות</span></div>`).join("");
+}
+
+/* client */
+$("chips").innerHTML=ACTS.map(([id,l])=>`<button class="chip" data-a="${id}" aria-pressed="${id==="all"}">${l}</button>`).join("");
+$("chips").addEventListener("click",e=>{const b=e.target.closest(".chip");if(!b)return;st.act=b.dataset.a;st.q="";$("q").value="";[...$("chips").children].forEach(x=>x.setAttribute("aria-pressed",x===b));renderClient();});
+$("when").addEventListener("click",e=>{const b=e.target.closest("button");if(!b)return;st.when=b.dataset.w;[...$("when").children].forEach(x=>x.setAttribute("aria-pressed",x===b));renderClient();});
+$("r").addEventListener("input",e=>{st.r=+e.target.value;$("rv").textContent=st.r;renderClient();});
+$("q").addEventListener("input",e=>{st.q=e.target.value.trim();renderClient();});
+
+function results(){
+ const [lo,hi]=st.when==="now"?[0,60]:st.when==="hour"?[60,120]:[0,600];
+ return C.filter(c=>c.pub&&free(c)>0&&c.off>=lo&&c.off<hi&&c.km<=st.r&&!st.skipped.has(c.id)
+  &&(st.q?(c.title+ACT_LABEL[c.act]+G[c.gym].name).includes(st.q):(st.act==="all"||c.act===st.act)))
+  .sort((a,b)=>a.off-b.off||a.km-b.km);
+}
+function cardHTML(c){
+ const [a,b]=ART[c.act];const f=free(c);
+ return `<div class="card" data-id="${c.id}">
+  <div class="stamp yes">הזמנה</div><div class="stamp no">דלג</div>
+  <div class="art" style="background:linear-gradient(135deg,${a},${b})">
+   <span class="in">בעוד <span class="num">${c.off}</span> דק׳</span>
+   <span class="act">${esc(ACT_LABEL[c.act])}</span>
+  </div>
+  <div class="cbody">
+   <div class="gym">${esc(c.title)}</div>
+   <div class="muted" style="font-size:14px">${esc(G[c.gym].name)} · ${esc(G[c.gym].area)}</div>
+   <div class="meta">
+    <div><small>מתחיל</small><span class="num">${hhmm(c.off)}</span> · ${c.dur} דק׳</div>
+    <div><small>מרחק</small>${c.km} ק״מ · ${walk(c.km)} דק׳ הליכה</div>
+    <div><small>מאמן/ת</small>${esc(c.coach)}</div>
+    <div><small>רמה</small>${esc(c.level)}</div>
+   </div>
+   <div class="price"><span class="spots ${f<=3?"low":""}">${f<=3?"נשארו רק ":"נשארו "}${f} מקומות</span><b>₪${c.price}</b></div>
+  </div></div>`;
+}
+function renderClient(){
+ const r=results();
+ $("count").textContent=r.length?`${r.length} שיעורים פנויים ברדיוס ${st.r} ק״מ`:"";
+ const top=r.slice(0,3);
+ if(!top.length){
+  $("stack").innerHTML=`<div class="empty"><b style="color:var(--ink)">אין כרגע שיעור פנוי שמתאים</b><span>נסו להגדיל את הרדיוס, לבחור "היום" או פעילות אחרת.</span><button class="btn ghost" id="reset">איפוס דילוגים</button></div>`;
+  $("reset").onclick=()=>{st.skipped.clear();renderClient();};
+ } else {
+  $("stack").innerHTML=top.reverse().map(cardHTML).join("");
+  const cards=$("stack").querySelectorAll(".card");
+  // reversed so the first result is last in DOM (on top); fix depth styles
+  cards.forEach((el,i)=>{const depth=cards.length-1-i;el.style.transform=depth?`scale(${1-depth*.05}) translateY(${depth*12}px)`:"";el.style.zIndex=10-depth;});
+  bindDrag(cards[cards.length-1]);
+ }
+ $("yesBtn").disabled=$("noBtn").disabled=!top.length;
+ renderTicker();
+}
+function topCard(){const cs=$("stack").querySelectorAll(".card");return cs[cs.length-1];}
+function fling(el,dir){
+ el.style.transition="transform .3s ease";
+ el.style.transform=`translateX(${dir*480}px) rotate(${dir*20}deg)`;
+ const id=el.dataset.id;
+ setTimeout(()=>{ if(dir<0){st.skipped.add(id);renderClient();} else openBooking(C.find(c=>c.id===id)); },260);
+}
+function bindDrag(el){
+ let x0=null,dx=0;const yes=el.querySelector(".stamp.yes"),no=el.querySelector(".stamp.no");
+ el.addEventListener("pointerdown",e=>{x0=e.clientX;dx=0;el.classList.add("dragging");el.setPointerCapture(e.pointerId);});
+ el.addEventListener("pointermove",e=>{if(x0===null)return;dx=e.clientX-x0;el.style.transform=`translateX(${dx}px) rotate(${dx/18}deg)`;yes.style.opacity=Math.max(0,Math.min(1,dx/100));no.style.opacity=Math.max(0,Math.min(1,-dx/100));});
+ const end=()=>{if(x0===null)return;x0=null;el.classList.remove("dragging");if(Math.abs(dx)>100)fling(el,Math.sign(dx));else{el.style.transform="";yes.style.opacity=no.style.opacity=0;}};
+ el.addEventListener("pointerup",end);el.addEventListener("pointercancel",end);
+}
+$("yesBtn").onclick=()=>{const t=topCard();if(t)fling(t,1);};
+$("noBtn").onclick=()=>{const t=topCard();if(t)fling(t,-1);};
+
+let signed=false;
+function closeSheet(){$("sheet").hidden=$("scrim").hidden=true;renderClient();}
+$("scrim").onclick=closeSheet;
+function openBooking(c){
+ const g=G[c.gym];
+ $("scrim").hidden=$("sheet").hidden=false;
+ $("sheet").innerHTML=`
+  <h3>${esc(c.title)}</h3>
+  <div class="muted" style="font-size:14px">${esc(g.name)} · ${esc(g.area)}</div>
+  <div>
+   <div class="line"><span>מתי</span><span><span class="num">${hhmm(c.off)}</span>, בעוד ${c.off} דק׳</span></div>
+   <div class="line"><span>הגעה</span><span>${walk(c.km)} דק׳ הליכה</span></div>
+   <div class="line"><span>תשלום</span><span>Apple Pay · ויזה •• 4421</span></div>
+   <div class="line"><span>מחיר</span><b class="num">₪${c.price}</b></div>
+  </div>
+  <label class="check"><input type="checkbox" id="hd" ${signed?"checked disabled":""}> <span>${signed?"הצהרת בריאות חתומה (בתוקף עד 10/2027) ונשלחת לסטודיו":"אני מאשר/ת את הצהרת הבריאות. נחתמת פעם אחת ונשלחת לכל סטודיו"}</span></label>
+  <div class="note">ביטול חינם עד 30 דק׳ לפני השיעור. אי-הגעה מחויבת במלוא המחיר.</div>
+  <div class="row2"><button class="btn ghost" id="cx">חזרה</button><button class="btn" id="ok">שלם והזמן ₪${c.price}</button></div>`;
+ const ok=$("ok"),hd=$("hd");
+ const upd=()=>{ok.disabled=!hd.checked;ok.style.opacity=hd.checked?1:.45;};upd();hd.onchange=upd;
+ $("cx").onclick=closeSheet;
+ ok.onclick=()=>{signed=true;book(c);};
+}
+function book(c){
+ c.booked++;c.drop++;
+ feed.unshift({t:"עכשיו",txt:"דניאל ל׳ הזמין/ה "+c.title,gym:c.gym,price:c.price,isNew:true});
+ st.skipped.add(c.id);
+ $("sheet").innerHTML=`<div class="ticket">
+  <span class="tag go">ההזמנה אושרה</span>
+  <h3>${esc(c.title)} · <span class="num">${hhmm(c.off)}</span></h3>
+  <canvas id="qr" width="25" height="25" aria-label="קוד QR לצ׳ק-אין (דמו)"></canvas>
+  <div class="note">מציגים בכניסה ל${esc(G[c.gym].name)}. ההזמנה נרשמה גם במערכת ${esc(G[c.gym].sys)} של הסטודיו.</div>
+  <div class="row2" style="width:100%"><button class="btn ghost" id="nav">ניווט</button><button class="btn" id="done">סיום</button></div></div>`;
+ drawQR($("qr"),c.id);
+ $("done").onclick=closeSheet;$("nav").onclick=()=>{$("nav").textContent=walk(c.km)+" דק׳ הליכה";};
+ gymSel.value=c.gym;renderGym();
+}
+function drawQR(cv,seed){
+ const x=cv.getContext("2d"),n=25;let s=[...seed].reduce((a,ch)=>a*31+ch.charCodeAt(0),7);
+ const rnd=()=>(s=(s*9301+49297)%233280)/233280;
+ x.fillStyle="#fff";x.fillRect(0,0,n,n);x.fillStyle="#101A35";
+ for(let i=0;i<n;i++)for(let j=0;j<n;j++)if(rnd()>.52)x.fillRect(i,j,1,1);
+ [[0,0],[n-7,0],[0,n-7]].forEach(([a,b])=>{x.fillStyle="#fff";x.fillRect(a,b,7,7);x.fillStyle="#101A35";x.fillRect(a,b,7,7);x.fillStyle="#fff";x.fillRect(a+1,b+1,5,5);x.fillStyle="#101A35";x.fillRect(a+2,b+2,3,3);});
+}
+
+/* gym console */
+const gymSel=$("gymSel");
+gymSel.innerHTML=GYMS.map(g=>`<option value="${g.id}">${esc(g.name)}</option>`).join("");
+gymSel.onchange=renderGym;
+function renderGym(){
+ const g=G[gymSel.value];const cls=C.filter(c=>c.gym===g.id).sort((a,b)=>a.off-b.off);
+ $("sync").textContent=g.sys==="ידני"?"ניהול ידני בקונסולה":`מחובר ל-${g.sys} · סונכרן לפני דקה`;
+ const freeToday=cls.reduce((s,c)=>s+free(c),0),drops=cls.reduce((s,c)=>s+c.drop,0),rev=cls.reduce((s,c)=>s+c.drop*c.price*.85,0);
+ $("kpis").innerHTML=[["מקומות פנויים היום",freeToday],["הזמנות דרופ-אין",drops],["הכנסה נטו היום","₪"+Math.round(rev)],["לקוחות חדשים החודש",14+drops]]
+  .map(([l,v])=>`<div class="kpi"><small>${l}</small><b>${v}</b></div>`).join("");
+ $("rows").innerHTML=cls.map(c=>{const m=c.booked-c.drop;return `<div class="srow">
+  <span class="num">${hhmm(c.off)}</span>
+  <span style="min-width:0"><b>${esc(c.title)}</b><br><small class="muted">${esc(c.coach)} · ${c.dur} דק׳</small></span>
+  <span><div class="cap"><i class="m" style="width:${m/c.cap*100}%"></i><i class="d" style="width:${c.drop/c.cap*100}%"></i></div><div class="capt"><span class="num">${c.booked}/${c.cap}</span> · ${free(c)} פנויים</div></span>
+  <input class="price-in" type="number" id="p-${c.id}" data-id="${c.id}" value="${c.price}" min="10" max="300" aria-label="מחיר ל${esc(c.title)}">
+  <input class="switch" type="checkbox" id="s-${c.id}" data-id="${c.id}" ${c.pub?"checked":""} aria-label="פרסום ${esc(c.title)} בדרופ-אין">
+ </div>`;}).join("");
+ const items=feed.filter(f=>f.gym===g.id);
+ $("feed").innerHTML=items.length?items.slice(0,5).map(f=>`<div class="fi ${f.isNew?"new":""}"><b>${esc(f.txt)}</b><small>${f.t} · ₪${f.price} · נכתב ל-${esc(g.sys)}</small></div>`).join(""):`<div class="fi"><small>עוד אין הזמנות היום. הזמינו שיעור בסטודיו הזה מהאפליקציה למעלה.</small></div>`;
+ feed.forEach(f=>f.isNew=false);
+}
+$("rows").addEventListener("change",e=>{const c=C.find(x=>x.id===e.target.dataset.id);if(!c)return;
+ if(e.target.type==="checkbox")c.pub=e.target.checked;else c.price=Math.max(10,Math.min(300,+e.target.value||c.price));
+ renderClient();});
+
+/* deck nav */
+const secs=[...document.querySelectorAll(".deck > section")];
+let cur=0;
+const io=new IntersectionObserver(es=>{es.forEach(e=>{if(e.isIntersecting){cur=secs.indexOf(e.target);$("pos").textContent=(cur+1)+" / "+secs.length;}});},{rootMargin:"-45% 0px -45% 0px"});
+secs.forEach(s=>io.observe(s));
+const go=i=>{i=Math.max(0,Math.min(secs.length-1,i));secs[i].scrollIntoView({behavior:matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});};
+$("prev").onclick=()=>go(cur-1);$("next").onclick=()=>go(cur+1);
+document.addEventListener("keydown",e=>{if(/INPUT|SELECT|TEXTAREA/.test(document.activeElement.tagName))return;
+ if(e.key==="PageDown"||e.key==="ArrowDown"&&e.altKey){e.preventDefault();go(cur+1);} if(e.key==="PageUp"||e.key==="ArrowUp"&&e.altKey){e.preventDefault();go(cur-1);}});
+
+renderClient();renderGym();
+})();
+</script>
+</body>
+</html>
